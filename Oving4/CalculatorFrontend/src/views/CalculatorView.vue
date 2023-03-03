@@ -1,7 +1,6 @@
 <template>
   <div class="main">
-
-      
+    
     <Calculator :header="header" :valueOne="valueOne" :valueTwo="valueTwo" 
     :operatorIsClicked="operatorIsClicked" 
     :operatorSymbol="operatorSymbol"
@@ -27,8 +26,9 @@
   
   
   <script>
- 
-import Calculator from '../components/Calculator.vue'
+  import axios from 'axios';
+  
+  import Calculator from '../components/Calculator.vue'
   
   import Log from '../components/Log.vue'
   
@@ -48,12 +48,12 @@ import Calculator from '../components/Calculator.vue'
        expressions:[],
        logNewExpression:false,
        answerClicked:false,
-       buttonIsClicked:""
+       buttonIsClicked:"",
+       result:null
       }
     },
     methods:{ 
       
-    
       saveValue(event){
         if(this.calculateIsClicked){
           this.valueOne=''
@@ -76,9 +76,6 @@ import Calculator from '../components/Calculator.vue'
         this.valueTwo=''
         this.operatorIsClicked=false
         this.calculateIsClicked=false
-       
-  
-  
       },
     
       deleteValue(){
@@ -104,8 +101,6 @@ import Calculator from '../components/Calculator.vue'
         } 
         this.value=this.valueOne
         
-       
-        
       },
       saveSecondValue(event){ 
         if(this.answerClicked){
@@ -113,19 +108,14 @@ import Calculator from '../components/Calculator.vue'
         }
         else{
           this.valueTwo+=event.target.value
-        }
-  
-         
+        }         
           this.value=this.valueTwo
-          
-       
+
         console.log(this.valueOne)
         console.log(this.valueTwo)
       },
       updateOperator(event){
-        if(this.calculateIsClicked){
-          this.operatorIsClicked=false
-        }
+        
         this.operatorIsClicked=true
         this.operatorSymbol=event.target.value
       },
@@ -136,14 +126,10 @@ import Calculator from '../components/Calculator.vue'
         this.answerClicked=false
       },
       
-      calculateAnswer(){
-        this.calculateIsClicked=true
-        this.previousAnswer=this.calculatorScreen
-        this.expressions.push((this.valueOne + ' ' + this.operatorSymbol + ' ' 
-        + this.valueTwo + ' = ' + this.previousAnswer))
-        this.logNewExpression=true
-        this.operatorIsClicked=false
-       
+       calculateAnswer(){
+         
+          this.calculateIsClicked=true
+
       },
       decimalIsClicked(){
         if(!this.operatorIsClicked){
@@ -157,55 +143,40 @@ import Calculator from '../components/Calculator.vue'
         }
        
       }
-     
-      
+  
     },
+    watch: {
+  calculateIsClicked: function(newValue) {
+    
+    if (newValue) {
+      const postObject = {
+          valueOne: this.valueOne,
+          operator: this.operatorSymbol,
+          valueTwo: this.valueTwo,
+          
+        }
+        console.log(postObject)
+      axios.post("http://localhost:8080/post",postObject).then(response => {
+        
+        this.result=response.data
+        this.expressions.push((this.valueOne + ' ' + this.operatorSymbol + ' ' 
+        + this.valueTwo + ' = ' + this.result))
+        this.logNewExpression=true
+        this.previousAnswer=this.calculatorScreen
+        this.operatorIsClicked=false
+      });
+    }
+  }
+},
     computed:{
       calculatorScreen(){
-        
         if(!this.calculateIsClicked){
           return this.value
         }else{
-          if(String(this.valueOne).includes('.') || String(this.valueTwo).includes('.')){
-            switch(this.operatorSymbol){
-              case '+':
-            return parseFloat(this.valueOne) + parseFloat(this.valueTwo)
-            
-            case '-':
-            return parseFloat(this.valueOne) - parseFloat(this.valueTwo)
-  
-            case '*':
-            return parseFloat(this.valueOne) * parseFloat(this.valueTwo)
-  
-            case '/':
-            return parseFloat(this.valueOne) / parseFloat(this.valueTwo)
-          }
+          return this.result
         }
-          else{
-            
-            switch(this.operatorSymbol){
-              
-              case '+':
-            
-            return parseInt(this.valueOne) + parseInt(this.valueTwo)
-            
-            case '-':
-            return parseInt(this.valueOne) - parseInt(this.valueTwo)
-  
-            case '*':
-            return parseInt(this.valueOne) * parseInt(this.valueTwo)
-  
-            case '/':
-            return parseInt(this.valueOne) / parseInt(this.valueTwo)
-            
-          }
-          }
-         
-        }
-        
       }
     }
-    
   }
   
   </script>
@@ -222,7 +193,6 @@ import Calculator from '../components/Calculator.vue'
     margin-top: 60px;
     
   }
-  
   
   html{
     background-color: #2c3e50;
