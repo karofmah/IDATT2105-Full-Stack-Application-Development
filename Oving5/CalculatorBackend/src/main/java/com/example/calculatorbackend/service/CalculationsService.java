@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class CalculationsService {
@@ -28,7 +29,7 @@ public class CalculationsService {
             Calculation _calculation = calculationRepository
                     .save(new Calculation(calculation.getUsername()
                             ,calculation.getValueOne(),calculation.getOperator()
-                            ,calculation.getValueTwo(),calculation.calculateAnswer()));
+                            ,calculation.getValueTwo()));
             return new ResponseEntity<>(_calculation, HttpStatus.CREATED);
         } catch (Exception e) {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
@@ -54,6 +55,7 @@ public class CalculationsService {
 
             if (username == null)
                 calculations.addAll(calculationRepository.findAll());
+
             else
                 calculations.addAll(calculationRepository.findByUsername(username));
 
@@ -65,6 +67,11 @@ public class CalculationsService {
         } catch (Exception e) {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
+    }
+    public ResponseEntity<Calculation> getCalculationById(long id) {
+        Optional<Calculation> calculations =calculationRepository.findById(id);
+        return calculations.map(calculation -> new ResponseEntity<>(calculation, HttpStatus.OK)).orElseGet(()
+                -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
 

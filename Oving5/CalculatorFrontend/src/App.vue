@@ -1,7 +1,10 @@
 <script setup lang="ts">
 import { RouterLink, RouterView } from "vue-router";
-import LogIn from "./components/LogIn.vue";
+import router from "./router";
 
+function logOut(){
+  router.push("/")
+}
 </script>
 
 <template>
@@ -16,6 +19,7 @@ import LogIn from "./components/LogIn.vue";
   </header>
   <div class="main">
     <RouterView/>  
+    <button v-if="$route.path!=='/'" @click="logOut">Log out</button>
   </div>
 </div>
 </template>

@@ -15,11 +15,24 @@
     @comma-clicked="decimalIsClicked"
    
     />
+    <div class="list-container">
+      <div class="list">
+        <ul >
+       <li class="calculation" v-for="(calculation,index) in calculations" :key="calculation.id" @click="getCalculation(calculation.id)">{{ calculationsString[index] }}</li>
+      </ul>
+    </div>
+      <button @click="getCalculations">Get previous calculations</button>
     
-    <Log :expressions="expressions"
+    </div>
+   
+    
+     
+    
+     <Log :expressions="expressions"
   :calculateIsClicked="calculateIsClicked"
   :logNewExpression="logNewExpression"
   />
+
   </div>
   </template>
   
@@ -32,9 +45,13 @@
   
   import Log from '../components/Log.vue'
   
+  import { useCounterStore } from '../stores/counter'
+
   export default {
+ 
   
     components: { Calculator, Log },
+    
     data(){
       return{
        header: 'Calculator',
@@ -49,7 +66,10 @@
        logNewExpression:false,
        answerClicked:false,
        buttonIsClicked:"",
-       result:null
+       result:null,
+       username:'',
+       calculations:[],
+       calculationsString:[],
       }
     },
     methods:{ 
@@ -142,21 +162,50 @@
           console.log(this.valueTwo)
         }
        
-      }
-  
+      },
+      logOut(){
+        router.push('/')
     },
+    getCalculation(id){
+      axios.get(`http://localhost:8080/calculations/${id}`).then(response=>{
+        console.log(response.data)
+        const selectedCalculation=response.data
+        this.valueOne=selectedCalculation.valueOne
+        this.operatorSymbol=selectedCalculation.operator
+        this.valueTwo=selectedCalculation.valueTwo
+        this.calculateIsClicked=true
+       this.calculations=''
+      } ) 
+    },
+    getCalculations(){
+      console.log(this.username)
+      axios.get('http://localhost:8080/calculations?username='+this.username).then(response=>{
+        console.log(response.data)
+        this.calculations=response.data
+        response.data.forEach(calculation=>{
+          this.calculationsString.push(calculation.valueOne + ' ' + calculation.operator + ' ' + calculation.valueTwo)
+        })
+        console.log("list displayed")
+        this.allClear()
+
+      } )
+     
+    }
+  },
     watch: {
   calculateIsClicked: function(newValue) {
     
-    if (newValue) {
-      const postObject = {
-          valueOne: this.valueOne,
-          operator: this.operatorSymbol,
-          valueTwo: this.valueTwo,
-          
+    if (newValue===true) {
+      const calculation = {
+        username:this.username,
+        valueOne: this.valueOne,
+        operator: this.operatorSymbol,
+        valueTwo: this.valueTwo,
         }
-        console.log(postObject)
-      axios.post("http://localhost:8080/calculate",postObject).then(response => {
+      
+      
+        
+      axios.post("http://localhost:8080/calculate",calculation).then(response => {
         
         this.result=response.data
         this.expressions.push((this.valueOne + ' ' + this.operatorSymbol + ' ' 
@@ -164,9 +213,22 @@
         this.logNewExpression=true
         this.previousAnswer=this.calculatorScreen
         this.operatorIsClicked=false
+        console.log(this.username)
+
+      
       });
+      
+      axios.post("http://localhost:8080/calculations",calculation).then(response=>{
+        console.log(response.data)
+       
+      })
+     
     }
   }
+},
+created(){
+ this.username= useCounterStore().getUsername()
+ console.log(this.username)
 },
     computed:{
       calculatorScreen(){
@@ -197,5 +259,32 @@
   html{
     background-color: #2c3e50;
   }
+
+  .main{
+    overflow-y: hidden;
+    width:1200px;
+    height: screen;
+   
+  }
+  .list-container{
+    float:right;
+    position: relative;
+    bottom:200px;
+    width:300px;
+    height: 300px;
+  }
+  .list{
+    width: 300px;
+    height: 300px;
+    border:solid white;
+    overflow-y:scroll
+  
+  }
+  .calculation{
+    cursor:pointer;
+    list-style-type:none;
+  }
+  
+  
   </style>
   

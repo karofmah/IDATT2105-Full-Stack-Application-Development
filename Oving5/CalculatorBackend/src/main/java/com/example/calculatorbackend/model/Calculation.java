@@ -22,18 +22,16 @@ public class Calculation {
     @Column
     private double valueTwo;
 
-    @Column
-    private double answer;
 
     public Calculation() {
     }
 
-    public Calculation(String username, double valueOne, String operator, double valueTwo, double answer) {
+    public Calculation(String username, double valueOne, String operator, double valueTwo) {
         this.username = username;
         this.valueOne = valueOne;
         this.operator = operator;
         this.valueTwo = valueTwo;
-        this.answer=answer;
+
     }
 
     public String getUsername() {
@@ -57,28 +55,28 @@ public class Calculation {
     }
 
     public double calculateAnswer() {
-        answer=this.answer;
+
         switch (operator) {
             case "+":
-                answer= valueOne + valueTwo;
-                break;
+                return valueOne + valueTwo;
+
 
             case "-":
-                answer= valueOne - valueTwo;
-                break;
+                return valueOne - valueTwo;
+
 
             case "*":
-                 answer= valueOne * valueTwo;
-                 break;
+                 return valueOne * valueTwo;
+
 
 
             case "/":
-                answer= valueOne / valueTwo;
-                break;
+                return valueOne / valueTwo;
+
             default:
-                answer= -1;
+                return -1;
         }
-        return answer;
+
     }
 
     @Override

@@ -19,19 +19,30 @@
 
 import BaseInput from '@/components/BaseInput.vue';
 import router from '@/router';
+import axios from 'axios';
+import { useCounterStore } from '../stores/counter'
 export default {
+    
     emits:['isDisabled'],
     components:{
         BaseInput
     },
     data() {
         return {
-            username: '',
-            
+            username: 'name',
+           
         }
     },
     methods: {
         logIn() {
+            useCounterStore().setUsername(this.username);
+            const postObject={
+                username: this.username,
+                name:this.username
+            }
+            axios.post("http://localhost:8080/users",postObject).then(response=>{
+        console.log(response.data)
+      })
             router.push("/my-calculator")
             
         }
@@ -42,10 +53,8 @@ export default {
         }
     }
 }
-    const username='admin'
-    function logIn(){
-        console.log(username)
-    }
+    
+   
 </script>
 
 <style scoped>

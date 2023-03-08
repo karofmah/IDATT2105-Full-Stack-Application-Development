@@ -30,7 +30,12 @@ public class CalculationController {
         return calculationsService.createCalculation(calculation);
     }
     @GetMapping("/calculations")
-    public ResponseEntity<List<Calculation>> getAllUsers(@RequestParam(required = false) String username) {
+    public ResponseEntity<List<Calculation>> getAllCalculations(@RequestParam("username") String username) {
+        System.out.println(username);
         return calculationsService.getAllCalculations(username);
+    }
+    @GetMapping("/calculations/{id}")
+    public ResponseEntity<Calculation> getCalculationById(@PathVariable("id") long id){
+        return calculationsService.getCalculationById(id);
     }
 }
