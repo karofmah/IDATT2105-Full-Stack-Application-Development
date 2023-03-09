@@ -12,6 +12,8 @@ public class User {
     @Column
     private String name;
 
+    @Column
+    private String password;
 
     public User() {
     }
@@ -30,6 +32,14 @@ public class User {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     @Override

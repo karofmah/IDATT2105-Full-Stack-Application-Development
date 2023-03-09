@@ -6,6 +6,10 @@
           type="text"
           required
           v-model="this.username" />
+          <BaseInput  label="password"
+          type="text"
+          required
+          v-model="this.password" />
     <button type="submit" @click="logIn" :disabled="this.isDisabled">
         Log in
     </button>
@@ -30,7 +34,7 @@ export default {
     data() {
         return {
             username: '',
-           
+            password:''
         }
     },
     methods: {
@@ -49,7 +53,7 @@ export default {
     },
     computed:{
         isDisabled(){
-            return this.username.length === 0
+            return this.username.length === 0 || this.password.length === 0
         }
     }
 }
@@ -69,16 +73,23 @@ h1{
     align-items: center;
     width: 100%;
     height: 100%;
-    background-color: rgb(134, 149, 209);
+    background-color: rgb(62, 62, 66);
     border: solid black;
     border-radius: 1%;
     margin-left: 200px;
+    
     
 }
 .item{
     margin: 50px;
 }
 button{
-    margin-top: 50px;
+    margin-top: 20px;
+    padding: 5px;
+    border-radius: 20px;
+    width: 90px;
+}
+button:enabled:hover{
+    cursor:pointer;
 }
 </style>

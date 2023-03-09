@@ -286,6 +286,10 @@ created(){
   .calculation:hover{
     background-color: #2c3e50;
   }
+  button{
+    border-radius:20px;
+    cursor:pointer;
+  }
   
   
   </style>

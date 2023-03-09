@@ -3,7 +3,6 @@ import { RouterLink, RouterView } from "vue-router";
 import router from "./router";
 
 
-
 function logOut(){
   router.push("/")
 }
@@ -37,7 +36,12 @@ function logOut(){
 a{
   width: 150px;
 }
-
+button{
+    padding: 1px;
+    border-radius: 20px;
+    width: 70px;
+    cursor: pointer;
+}
 .main{
   grid-area: 2/1/6/2;
   height: 450px;
