@@ -2,6 +2,8 @@
 import { RouterLink, RouterView } from "vue-router";
 import router from "./router";
 
+
+
 function logOut(){
   router.push("/")
 }
@@ -38,7 +40,7 @@ a{
 
 .main{
   grid-area: 2/1/6/2;
-  height: 400px;
+  height: 450px;
   
 }
 header {

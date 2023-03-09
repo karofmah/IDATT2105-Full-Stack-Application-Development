@@ -29,7 +29,7 @@ export default {
     },
     data() {
         return {
-            username: 'name',
+            username: '',
            
         }
     },

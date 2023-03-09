@@ -25,18 +25,13 @@
     
     </div>
    
-    
-     
-    
-     <Log :expressions="expressions"
+     <Log class="log" :expressions="expressions"
   :calculateIsClicked="calculateIsClicked"
   :logNewExpression="logNewExpression"
   />
 
   </div>
   </template>
-  
-  
   
   <script>
   import axios from 'axios';
@@ -174,14 +169,15 @@
         this.operatorSymbol=selectedCalculation.operator
         this.valueTwo=selectedCalculation.valueTwo
         this.calculateIsClicked=true
-       this.calculations=''
+        this.calculations=''
+        this.calculationsString=[]
       } ) 
     },
     getCalculations(){
       console.log(this.username)
       axios.get('http://localhost:8080/calculations?username='+this.username).then(response=>{
         console.log(response.data)
-        this.calculations=response.data
+        this.calculations=response.data.reverse().slice(0,10)
         response.data.forEach(calculation=>{
           this.calculationsString.push(calculation.valueOne + ' ' + calculation.operator + ' ' + calculation.valueTwo)
         })
@@ -210,6 +206,7 @@
         this.result=response.data
         this.expressions.push((this.valueOne + ' ' + this.operatorSymbol + ' ' 
         + this.valueTwo + ' = ' + this.result))
+        console.log(this.expressions)
         this.logNewExpression=true
         this.previousAnswer=this.calculatorScreen
         this.operatorIsClicked=false
@@ -264,6 +261,7 @@ created(){
     overflow-y: hidden;
     width:1200px;
     height: screen;
+  
    
   }
   .list-container{
@@ -283,6 +281,10 @@ created(){
   .calculation{
     cursor:pointer;
     list-style-type:none;
+
+  }
+  .calculation:hover{
+    background-color: #2c3e50;
   }
   
   

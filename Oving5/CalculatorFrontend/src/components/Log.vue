@@ -27,13 +27,11 @@ export default{
  height: 150px;
  margin-left: 300px;
  margin-top: 50px;
- 
-}
-.log{
  overflow:hidden;
  overflow-y: scroll;
  
 }
+
 li{
  color:white;
 }
