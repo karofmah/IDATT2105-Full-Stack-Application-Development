@@ -1,6 +1,7 @@
 <template>
   <div class="main">
     
+
     <Calculator :header="header" :valueOne="valueOne" :valueTwo="valueTwo" 
     :operatorIsClicked="operatorIsClicked" 
     :operatorSymbol="operatorSymbol"
@@ -42,11 +43,14 @@
   
   import { useCounterStore } from '../stores/counter'
 
+
+
   export default {
  
-  
+    
     components: { Calculator, Log },
     
+  
     data(){
       return{
        header: 'Calculator',
@@ -65,6 +69,7 @@
        username:'',
        calculations:[],
        calculationsString:[],
+       
       }
     },
     methods:{ 
@@ -169,7 +174,7 @@
         this.operatorSymbol=selectedCalculation.operator
         this.valueTwo=selectedCalculation.valueTwo
         this.calculateIsClicked=true
-        this.calculations=''
+        this.calculations=[]
         this.calculationsString=[]
       } ) 
     },
@@ -226,6 +231,7 @@
 created(){
  this.username= useCounterStore().getUsername()
  console.log(this.username)
+
 },
     computed:{
       calculatorScreen(){
@@ -275,7 +281,7 @@ created(){
     width: 300px;
     height: 300px;
     border:solid white;
-    overflow-y:scroll
+   
   
   }
   .calculation{

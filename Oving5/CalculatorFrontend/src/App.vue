@@ -13,14 +13,14 @@ function logOut(){
   <header> 
       <nav>
         
-        <RouterLink  v-if="$route.path!=='/'" to="/my-calculator" >My calculator</RouterLink>
-        <RouterLink  v-if="$route.path!=='/'" to="/calculator-form">Calculator form</RouterLink>
+        <RouterLink  v-if="$route.path!=='/' && $route.path!=='/sign-up'  " to="/my-calculator" >My calculator</RouterLink>
+        <RouterLink  v-if="$route.path!=='/' && $route.path!=='/sign-up'" to="/calculator-form">Calculator form</RouterLink>
         
       </nav>
   </header>
   <div class="main">
     <RouterView/>  
-    <button v-if="$route.path!=='/'" @click="logOut">Log out</button>
+    <button v-if="$route.path!=='/'  && $route.path!=='/sign-up'" @click="logOut">Log out</button>
   </div>
 </div>
 </template>

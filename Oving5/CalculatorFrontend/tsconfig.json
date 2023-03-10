@@ -2,10 +2,11 @@
   "compilerOptions": {
     "target": "ES5",
     "module": "commonjs",
-    "allowJs": true
-    
+    "allowJs": true,
+    "outDir": "build"
     
   },
+  "exclude": [   "node_modules",     "dist","build/**/*"],
  
   "files": [],
   "references": [

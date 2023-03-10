@@ -50,7 +50,7 @@
     
   </template>
   
-  <script>
+  <script >
   import axios from "axios"
   import BaseInput from './BaseInput.vue' 
   import { useCounterStore } from '../stores/counter'
@@ -161,12 +161,6 @@
   h1{
     color: white;
   }
-  input:-webkit-autofill,
-  input:-webkit-autofill:hover,
-  input:-webkit-autofill:focus,
-  input:-webkit-autofill:active {
-    -webkit-box-shadow: 0 0 0px 1000px white inset !important; /* Override the default white background */
-    background-color: transparent !important; /* Set the background color to transparent */
-  }
+  
   
   </style>

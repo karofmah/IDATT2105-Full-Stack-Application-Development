@@ -1,6 +1,6 @@
 <template>
     <div class="container">
-        <h1>Log in</h1>
+        <h1>Sign up</h1>
         <div class="item">
             <BaseInput  label="username"
           type="text"
@@ -10,10 +10,12 @@
           type="text"
           required
           v-model="this.password" />
-    <button type="submit" @click="logIn" :disabled="this.isDisabled">
+    <button type="submit" @click="signUp" :disabled="this.isDisabled">
+        Sign up
+    </button>
+    <button @click="logIn">
         Log in
     </button>
-    <button @click="signUp">Sign up</button>
         </div>
        
     </div>
@@ -24,7 +26,6 @@
 
 import BaseInput from '@/components/BaseInput.vue';
 import router from '@/router';
-import { useCounterStore } from '@/stores/counter';
 import axios from 'axios';
 
 
@@ -39,40 +40,39 @@ export default {
     data() {
         return {
             username: 'name',
-            password:'pw',
-            validData:false
+            password:'pw'
             
         }
     },
    
     methods: {
-        async logIn() {
-           
-        useCounterStore().setUsername(this.username);
-
-    
-        axios.get('http://localhost:8080/users').then(response=>{
-        console.log(response.data)
-
-            response.data.forEach(user=>{
-                console.log(user.name)
-            if(this.username==user.name){
-                router.push("/my-calculator")
-                this.validData=true
-                return;;
-            }
+        async signUp() {
           
-        })
-        
-        
-        if(!this.validData){
-            alert("Invalid username or password")
+            const postObject={
+                username: this.username,
+                name:this.username,
+                password:this.password
+            }
+            
+        axios.post("http://localhost:8080/users",postObject).then(response=>{
+        console.log(response.data)
+        console.log(response.status)
+        if(response.status==200){
+            alert("You are already registered")
+        }else if(response.status==201){
+            alert("You are registered successfully")
+            
         }
-      })
-    
+           
+        }).catch(function(err){
+       console.log('Error',err)
+       alert("An error occurred while registering");
+     })
+     
+       
     },
-    signUp() {
-        router.push("/sign-up")
+    logIn() {
+        router.push("/")
     }
 },
     computed:{
