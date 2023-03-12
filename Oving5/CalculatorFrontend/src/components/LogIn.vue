@@ -26,7 +26,7 @@ import BaseInput from '@/components/BaseInput.vue';
 import router from '@/router';
 import { useCounterStore } from '@/stores/counter';
 import axios from 'axios';
-
+import { useTokenStore } from "../stores/dist/mytoken";
 
 
 
@@ -40,36 +40,34 @@ export default {
         return {
             username: 'name',
             password:'pw',
-            validData:false
-            
+            validData:false,
+            tokenStore:useTokenStore(),
+           
         }
     },
-   
+    /*
+    setup() {
+    const tokenStore = useTokenStore();
+    return { tokenStore };
+  },
+*/
     methods: {
         async logIn() {
            
         useCounterStore().setUsername(this.username);
+        useCounterStore().setPassword(this.password);
 
-    
-        axios.get('http://localhost:8080/users').then(response=>{
-        console.log(response.data)
 
-            response.data.forEach(user=>{
-                console.log(user.name)
-            if(this.username==user.name){
-                router.push("/my-calculator")
-                this.validData=true
-                return;;
-            }
-          
-        })
-        
-        
-        if(!this.validData){
+        await this.tokenStore.getTokenAndSaveInStore(this.username, this.password);
+        if((this.tokenStore.jwtToken || this.tokenStore.jwtToken !==null) && this.tokenStore.loggedInUser!==null){
+            console.log(this.tokenStore.loggedInUser)
+           
+            router.push("/my-calculator")
+        } else {
             alert("Invalid username or password")
         }
-      })
-    
+        
+
     },
     signUp() {
         router.push("/sign-up")
@@ -117,5 +115,6 @@ button{
 }
 button:enabled:hover{
     cursor:pointer;
+    background-color: rgba(247, 244, 246, 0);
 }
 </style>

@@ -14,5 +14,5 @@ export const getUserInfo = (username, token) => {
             "Authorization" : "Bearer " + token
         },
     };
-    return axios.get("http://localhost:8080/users/"+username, config);
+    return axios.get("http://localhost:8080/users?name=" +username, config);
 }

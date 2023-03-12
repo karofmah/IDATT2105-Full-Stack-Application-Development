@@ -24,7 +24,7 @@ export default{
  border:solid black;
  color: white;
  width: 300px;
- height: 150px;
+ height: 90px;
  margin-left: 300px;
  margin-top: 50px;
  overflow:hidden;

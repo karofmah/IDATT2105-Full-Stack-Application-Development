@@ -26,6 +26,7 @@
 
 import BaseInput from '@/components/BaseInput.vue';
 import router from '@/router';
+import { useTokenStore } from '@/stores/dist/mytoken';
 import axios from 'axios';
 
 
@@ -40,8 +41,8 @@ export default {
     data() {
         return {
             username: 'name',
-            password:'pw'
-            
+            password:'pw',
+            tokenStore:useTokenStore(),
         }
     },
    
@@ -54,11 +55,11 @@ export default {
                 password:this.password
             }
             
-        axios.post("http://localhost:8080/users",postObject).then(response=>{
+        axios.post("http://localhost:8080/signup",postObject).then(response=>{
         console.log(response.data)
         console.log(response.status)
         if(response.status==200){
-            alert("You are already registered")
+            alert("You are already registered") 
         }else if(response.status==201){
             alert("You are registered successfully")
             
@@ -117,5 +118,6 @@ button{
 }
 button:enabled:hover{
     cursor:pointer;
+    background-color: rgba(247, 244, 246, 0);
 }
 </style>

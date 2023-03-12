@@ -1,6 +1,13 @@
 <template>
   <div class="main">
     
+    <div v-if="this.user" id="mainContainer">
+          <h2>Hey, {{ this.user.name }} </h2>
+          <label id="homepageTitle">Welcome to the home screen</label>
+      </div>
+      <div v-if="!this.user || this.user===null">
+          <h2>Unauthorized!!!</h2>
+      </div>
 
     <Calculator :header="header" :valueOne="valueOne" :valueTwo="valueTwo" 
     :operatorIsClicked="operatorIsClicked" 
@@ -35,13 +42,18 @@
   </template>
   
   <script>
-  import axios from 'axios';
+  import { useTokenStore } from '@/stores/dist/mytoken';
+import axios from 'axios';
   
   import Calculator from '../components/Calculator.vue'
   
   import Log from '../components/Log.vue'
   
   import { useCounterStore } from '../stores/counter'
+
+  import {getUserInfo} from "/httputils.js"
+
+
 
 
 
@@ -50,7 +62,8 @@
     
     components: { Calculator, Log },
     
-  
+   
+
     data(){
       return{
        header: 'Calculator',
@@ -67,13 +80,36 @@
        buttonIsClicked:"",
        result:null,
        username:'',
+       password:'',
        calculations:[],
        calculationsString:[],
-       
+       user:null,
+       tokenStore:useTokenStore()
       }
     },
+    async mounted() {
+      if(!this.tokenStore.jwtToken || this.tokenStore.jwtToken===null){
+          console.log("Unauthenticated context");
+      } else {
+          console.log("Authenticated context");
+          this.user = this.tokenStore.loggedInUser
+          this.username = this.user.name
+          this.password = this.user.password
+          setInterval(()=>{
+            this.refreshToken();
+
+          }, 1000*10)
+        
+      }
+    },
+
     methods:{ 
-      
+      async refreshToken(){
+        console.log("refreshing token");
+        console.log(this.tokenStore.jwtToken);
+        return await this.tokenStore.getTokenAndSaveInStore(this.user.name, this.user.password)
+        
+      },
       saveValue(event){
         if(this.calculateIsClicked){
           this.valueOne=''
@@ -179,7 +215,7 @@
       } ) 
     },
     getCalculations(){
-      console.log(this.username)
+      
       axios.get('http://localhost:8080/calculations?username='+this.username).then(response=>{
         console.log(response.data)
         this.calculations=response.data.reverse().slice(0,10)
@@ -198,7 +234,7 @@
     
     if (newValue===true) {
       const calculation = {
-        username:this.username,
+        username:this.user.name,
         valueOne: this.valueOne,
         operator: this.operatorSymbol,
         valueTwo: this.valueTwo,
@@ -229,8 +265,10 @@
   }
 },
 created(){
- this.username= useCounterStore().getUsername()
+ //this.username= useCounterStore().getUsername()
+ //this.password=useCounterStore().getPassword()
  console.log(this.username)
+ 
 
 },
     computed:{

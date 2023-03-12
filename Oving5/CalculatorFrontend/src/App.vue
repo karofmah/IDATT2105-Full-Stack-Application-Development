@@ -1,9 +1,15 @@
 <script setup lang="ts">
 import { RouterLink, RouterView } from "vue-router";
 import router from "./router";
+import { useTokenStore } from "./stores/dist/mytoken";
+
+const tokenStore=useTokenStore()
+
 
 
 function logOut(){
+  tokenStore.loggedInUser=null;
+  tokenStore.jwtToken=null;
   router.push("/")
 }
 </script>
@@ -13,8 +19,8 @@ function logOut(){
   <header> 
       <nav>
         
-        <RouterLink  v-if="$route.path!=='/' && $route.path!=='/sign-up'  " to="/my-calculator" >My calculator</RouterLink>
-        <RouterLink  v-if="$route.path!=='/' && $route.path!=='/sign-up'" to="/calculator-form">Calculator form</RouterLink>
+        <RouterLink  v-if="$route.path!=='/' && $route.path!=='/sign-up'  " to="/my-calculator" >Calculator</RouterLink>
+        <RouterLink  v-if="$route.path!=='/' && $route.path!=='/sign-up'" to="/calculator-form">Contact form</RouterLink>
         
       </nav>
   </header>
@@ -41,6 +47,9 @@ button{
     border-radius: 20px;
     width: 70px;
     cursor: pointer;
+}
+button:hover{
+  background-color: rgba(247, 244, 246, 0);
 }
 .main{
   grid-area: 2/1/6/2;
