@@ -38,9 +38,9 @@ public class UsersService {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-    public User getUser(String name){
-        System.out.println(userRepository.findByName(name));
-        return userRepository.findByName(name);
+    public User getUser(String name, String password){
+        System.out.println(userRepository.findByNameAndPassword(name,password));
+        return userRepository.findByNameAndPassword(name,password);
 
     }
     public boolean checkUserCredentials(final String username, final String password) {
@@ -51,21 +51,6 @@ public class UsersService {
             }
         }
         return false;
-    }
-
-    public ResponseEntity<List<User>> getAllUsers() {
-        try {
-
-            List<User> users = new ArrayList<>(userRepository.findAll());
-
-            if (users.isEmpty()) {
-                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-            }
-
-            return new ResponseEntity<>(users, HttpStatus.OK);
-        } catch (Exception e) {
-            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
-        }
     }
 
     public ResponseEntity<User> updateUser(long id, User user) {

@@ -3,7 +3,7 @@ package com.example.calculatorbackend.controller;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
-import com.example.calculatorbackend.dao.MockDao;
+
 import com.example.calculatorbackend.model.LoginRequest;
 import com.example.calculatorbackend.service.UsersService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,10 +21,9 @@ import java.time.Instant;
 @CrossOrigin("http://localhost:5173/")
 
 public class TokenController {
-    // keyStr is hardcoded here for testing purpose
-    // in a real scenario, it should either be stored in a database or injected from the environment
+
     public static final String keyStr = "testsecrettestsecrettestsecrettestsecrettestsecret";
-    private static final Duration JWT_TOKEN_VALIDITY = Duration.ofSeconds(10);
+    private static final Duration JWT_TOKEN_VALIDITY = Duration.ofMinutes(5);
 
 
     private UsersService usersService;
@@ -36,7 +35,7 @@ public class TokenController {
 
     @PostMapping(value = "")
     @ResponseStatus(value = HttpStatus.CREATED)
-    public String generateToken(final @RequestBody LoginRequest loginRequest) throws Exception {
+    public String generateToken(final @RequestBody LoginRequest loginRequest) {
         // if username and password are valid, issue an access token
         // note that subsequent requests need this token
         System.out.println(loginRequest.getUsername());
@@ -50,8 +49,8 @@ public class TokenController {
 
     public String generateToken(final String userId) {
         final Instant now = Instant.now();
-        final Algorithm hmac512 = Algorithm.HMAC512(keyStr);;
-        final JWTVerifier verifier = JWT.require(hmac512).build();
+        final Algorithm hmac512 = Algorithm.HMAC512(keyStr);
+        //final JWTVerifier verifier = JWT.require(hmac512).build();
         return JWT.create()
                 .withSubject(userId)
                 .withIssuer("idatt2105_token_issuer_app")

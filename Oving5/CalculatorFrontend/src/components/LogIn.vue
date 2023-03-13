@@ -5,31 +5,58 @@
             <BaseInput  label="username"
           type="text"
           required
-          v-model="this.username" />
+          v-model="username" />
           <BaseInput  label="password"
           type="text"
           required
-          v-model="this.password" />
-    <button type="submit" @click="logIn" :disabled="this.isDisabled">
+          v-model="password" />
+    <button type="submit" @click="logIn()" :disabled="isDisabled">
         Log in
     </button>
-    <button @click="signUp">Sign up</button>
+    <button @click="signUp()">Sign up</button>
         </div>
        
     </div>
     
 </template>
 
-<script>
+<script setup>
 
 import BaseInput from '@/components/BaseInput.vue';
 import router from '@/router';
-import { useCounterStore } from '@/stores/counter';
-import axios from 'axios';
+import { ref,computed } from 'vue';
 import { useTokenStore } from "../stores/dist/mytoken";
 
 
 
+    const username= ref('')
+    const password=ref('')
+    //const validData:false,
+    const tokenStore=useTokenStore()
+    const isDisabled=computed(()=>{
+        return username.value.length === 0 || password.value.length === 0
+    })
+           
+        
+
+    async function logIn() {
+
+           await tokenStore.getTokenAndSaveInStore(username.value, password.value);
+           if((tokenStore.jwtToken || tokenStore.jwtToken !==null) && tokenStore.loggedInUser!==null){
+               console.log(tokenStore.loggedInUser)
+               console.log(tokenStore.jwtToken)
+               router.push("/my-calculator")
+           } else {
+               alert("Invalid username or password")
+           }
+           
+       }
+       function signUp() {
+           router.push("/sign-up")
+       }
+       
+   
+/*
 export default {
     
     emits:['isDisabled'],
@@ -50,13 +77,11 @@ export default {
     const tokenStore = useTokenStore();
     return { tokenStore };
   },
-*/
+
     methods: {
         async logIn() {
            
-        useCounterStore().setUsername(this.username);
-        useCounterStore().setPassword(this.password);
-
+        
 
         await this.tokenStore.getTokenAndSaveInStore(this.username, this.password);
         if((this.tokenStore.jwtToken || this.tokenStore.jwtToken !==null) && this.tokenStore.loggedInUser!==null){
@@ -79,7 +104,7 @@ export default {
         }
     },
     
-}
+}*/
    
 </script>
 

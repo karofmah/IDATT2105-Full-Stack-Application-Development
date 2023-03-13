@@ -21,18 +21,18 @@ public class CalculationController {
     }
 
     @PostMapping("/calculate")
-    public double saveCalculation(@RequestBody Calculation calculation) {
+    public double calculateAnswer(@RequestBody Calculation calculation) {
         return calculationsService.calculate(calculation);
     }
 
  @PostMapping("/calculations")
-    public ResponseEntity<Calculation> createCalculation(@RequestBody Calculation calculation) {
-        return calculationsService.createCalculation(calculation);
+    public ResponseEntity<Calculation> saveCalculation(@RequestBody Calculation calculation) {
+        return calculationsService.saveCalculation(calculation);
     }
     @GetMapping("/calculations")
-    public ResponseEntity<List<Calculation>> getAllCalculations(@RequestParam("username") String username) {
+    public ResponseEntity<List<Calculation>> getAllCalculationsByName(@RequestParam("username") String username) {
         System.out.println(username);
-        return calculationsService.getAllCalculations(username);
+        return calculationsService.getAllCalculationsByName(username);
     }
     @GetMapping("/calculations/{id}")
     public ResponseEntity<Calculation> getCalculationById(@PathVariable("id") long id){

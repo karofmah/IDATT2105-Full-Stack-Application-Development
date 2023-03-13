@@ -26,6 +26,8 @@ public class JWTAuthorizationFilter extends OncePerRequestFilter {
     public static final String USER = "USER";
     public static final String ROLE_USER = "ROLE_" + USER;
 
+
+
     @Override
     protected void doFilterInternal(
 

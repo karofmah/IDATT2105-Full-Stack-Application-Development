@@ -5,15 +5,15 @@
             <BaseInput  label="username"
           type="text"
           required
-          v-model="this.username" />
+          v-model="username" />
           <BaseInput  label="password"
           type="text"
           required
-          v-model="this.password" />
-    <button type="submit" @click="signUp" :disabled="this.isDisabled">
+          v-model="password" />
+    <button type="submit" @click="signUp()" :disabled="isDisabled">
         Sign up
     </button>
-    <button @click="logIn">
+    <button @click="logIn()">
         Log in
     </button>
         </div>
@@ -22,37 +22,30 @@
     
 </template>
 
-<script>
+<script setup>
 
 import BaseInput from '@/components/BaseInput.vue';
 import router from '@/router';
 import { useTokenStore } from '@/stores/dist/mytoken';
 import axios from 'axios';
+import { ref, computed } from 'vue';
 
 
+const username=ref('')
+const password=ref('');
 
+const isDisabled=computed(()=>{
+return username.value.length==0||password.value.length==0
+})
 
-export default {
-    
-    emits:['isDisabled'],
-    components:{
-        BaseInput
-    },
-    data() {
-        return {
-            username: 'name',
-            password:'pw',
-            tokenStore:useTokenStore(),
-        }
-    },
-   
-    methods: {
-        async signUp() {
-          
-            const postObject={
-                username: this.username,
-                name:this.username,
-                password:this.password
+function logIn(){
+    router.push("/")
+}
+async function signUp() {
+    const postObject={
+                username: username.value,
+                name:username.value,
+                password:password.value,
             }
             
         axios.post("http://localhost:8080/signup",postObject).then(response=>{
@@ -70,18 +63,6 @@ export default {
        alert("An error occurred while registering");
      })
      
-       
-    },
-    logIn() {
-        router.push("/")
-    }
-},
-    computed:{
-        isDisabled(){
-            return this.username.length === 0 || this.password.length === 0
-        }
-    },
-    
 }
    
 </script>

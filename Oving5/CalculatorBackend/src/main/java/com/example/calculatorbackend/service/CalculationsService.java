@@ -24,7 +24,7 @@ public class CalculationsService {
     public void setCalculationRepository(CalculationRepository calculationRepository) {
         this.calculationRepository=calculationRepository;
     }
-    public ResponseEntity<Calculation> createCalculation(Calculation calculation) {
+    public ResponseEntity<Calculation> saveCalculation(Calculation calculation) {
         try {
             Calculation _calculation = calculationRepository
                     .save(new Calculation(calculation.getUsername()
@@ -49,7 +49,7 @@ public class CalculationsService {
         }
 
 
-    public ResponseEntity<List<Calculation>> getAllCalculations(String username) {
+    public ResponseEntity<List<Calculation>> getAllCalculationsByName(String username) {
         try {
             List<Calculation> calculations = new ArrayList<>();
 

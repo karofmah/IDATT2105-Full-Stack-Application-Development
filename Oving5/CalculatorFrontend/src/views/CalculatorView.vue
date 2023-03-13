@@ -1,13 +1,11 @@
 <template>
   <div class="main">
     
-    <div v-if="this.user" id="mainContainer">
+    <div v-if="this.user || this.user!==null" id="mainContainer">
           <h2>Hey, {{ this.user.name }} </h2>
-          <label id="homepageTitle">Welcome to the home screen</label>
+          <label id="calculatorPageTitle">Welcome to the calculator screen</label>
       </div>
-      <div v-if="!this.user || this.user===null">
-          <h2>Unauthorized!!!</h2>
-      </div>
+     
 
     <Calculator :header="header" :valueOne="valueOne" :valueTwo="valueTwo" 
     :operatorIsClicked="operatorIsClicked" 
@@ -42,28 +40,21 @@
   </template>
   
   <script>
-  import { useTokenStore } from '@/stores/dist/mytoken';
+  import router from '@/router';
+import { useTokenStore } from '@/stores/dist/mytoken';
 import axios from 'axios';
   
   import Calculator from '../components/Calculator.vue'
   
   import Log from '../components/Log.vue'
   
-  import { useCounterStore } from '../stores/counter'
-
-  import {getUserInfo} from "/httputils.js"
-
-
-
-
-
+ 
   export default {
  
     
     components: { Calculator, Log },
     
    
-
     data(){
       return{
        header: 'Calculator',
@@ -83,7 +74,7 @@ import axios from 'axios';
        password:'',
        calculations:[],
        calculationsString:[],
-       user:null,
+       user:'',
        tokenStore:useTokenStore()
       }
     },
@@ -95,14 +86,16 @@ import axios from 'axios';
           this.user = this.tokenStore.loggedInUser
           this.username = this.user.name
           this.password = this.user.password
+          
           setInterval(()=>{
             this.refreshToken();
-
-          }, 1000*10)
+          }, 1000*60*5)
         
       }
+      if(!this.user || this.user===null){
+        router.push("/")
+      }
     },
-
     methods:{ 
       async refreshToken(){
         console.log("refreshing token");
@@ -166,7 +159,6 @@ import axios from 'axios';
           this.valueTwo+=event.target.value
         }         
           this.value=this.valueTwo
-
         console.log(this.valueOne)
         console.log(this.valueTwo)
       },
@@ -185,7 +177,6 @@ import axios from 'axios';
        calculateAnswer(){
          
           this.calculateIsClicked=true
-
       },
       decimalIsClicked(){
         if(!this.operatorIsClicked){
@@ -224,7 +215,6 @@ import axios from 'axios';
         })
         console.log("list displayed")
         this.allClear()
-
       } )
      
     }
@@ -252,7 +242,6 @@ import axios from 'axios';
         this.previousAnswer=this.calculatorScreen
         this.operatorIsClicked=false
         console.log(this.username)
-
       
       });
       
@@ -264,13 +253,7 @@ import axios from 'axios';
     }
   }
 },
-created(){
- //this.username= useCounterStore().getUsername()
- //this.password=useCounterStore().getPassword()
- console.log(this.username)
- 
 
-},
     computed:{
       calculatorScreen(){
         if(!this.calculateIsClicked){
@@ -300,7 +283,6 @@ created(){
   html{
     background-color: #2c3e50;
   }
-
   .main{
     overflow-y: hidden;
     width:1200px;
@@ -325,7 +307,6 @@ created(){
   .calculation{
     cursor:pointer;
     list-style-type:none;
-
   }
   .calculation:hover{
     background-color: #2c3e50;

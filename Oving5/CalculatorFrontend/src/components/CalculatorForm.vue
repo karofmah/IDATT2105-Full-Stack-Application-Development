@@ -53,7 +53,7 @@
   <script >
   import axios from "axios"
   import BaseInput from './BaseInput.vue' 
-  import { useCounterStore } from '../stores/counter'
+  import { useCounterStore } from '../stores/store'
   
   export default {
     

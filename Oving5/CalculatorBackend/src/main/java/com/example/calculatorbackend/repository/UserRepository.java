@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface UserRepository extends JpaRepository<User,Long> {
 
-    User findByName(String name);
+    User findByNameAndPassword(String name,String password);
 
     <S extends User> S save(S User);
 
