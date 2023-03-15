@@ -209,6 +209,10 @@ import axios from 'axios';
       
       axios.get('http://localhost:8080/calculations?username='+this.username).then(response=>{
         console.log(response.data)
+        if(response.data.length===0){
+          alert("You have not calculated anything yet")
+        }
+   
         this.calculations=response.data.reverse().slice(0,10)
         response.data.forEach(calculation=>{
           this.calculationsString.push(calculation.valueOne + ' ' + calculation.operator + ' ' + calculation.valueTwo)

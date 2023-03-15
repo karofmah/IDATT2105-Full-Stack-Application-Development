@@ -5,8 +5,11 @@ import com.example.calculatorbackend.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -32,20 +35,37 @@ public class UsersService {
             }
             System.out.println(users);
             User _user = userRepository
-                    .save(new User(user.getName(),user.getPassword()));
+                    .save(new User(user.getName(),user.getHashedPassword(user.getPassword())));
             return new ResponseEntity<>(_user, HttpStatus.CREATED);
         } catch (Exception e) {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-    public User getUser(String name, String password){
-        System.out.println(userRepository.findByNameAndPassword(name,password));
-        return userRepository.findByNameAndPassword(name,password);
+    private static final char[] HEX_ARRAY = "0123456789ABCDEF".toCharArray();
+
+    public static String bytesToHex(byte[] bytes) {
+        char[] hexChars = new char[bytes.length * 2];
+        for (int i = 0; i < bytes.length; i++) {
+            int v = bytes[i] & 0xFF;
+            hexChars[i * 2] = HEX_ARRAY[v >>> 4];
+            hexChars[i * 2 + 1] = HEX_ARRAY[v & 0x0F];
+        }
+        return new String(hexChars);
+    }
+    public User getUser(String name, String password) throws NoSuchAlgorithmException {
+        MessageDigest digest = MessageDigest.getInstance("SHA-256");
+        byte[] hash = digest.digest(password.getBytes());
+        String hashedPassword = bytesToHex(hash);
+        System.out.println("Hashed password: " + hashedPassword);
+        System.out.println(userRepository.findByNameAndPassword(name,hashedPassword));
+
+        return userRepository.findByNameAndPassword(name,hashedPassword);
 
     }
-    public boolean checkUserCredentials(final String username, final String password) {
-
+    public boolean checkUserCredentials(final String username, final String password) throws NoSuchAlgorithmException {
         for(User user : userRepository.findAll()){
+            System.out.println(user.getPassword());
+            System.out.println(password);
             if(user.getName().equals(username) && user.getPassword().equals(password))  {
                 return true;
             }

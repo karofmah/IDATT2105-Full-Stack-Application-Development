@@ -1,6 +1,10 @@
 package com.example.calculatorbackend.model;
 
 import jakarta.persistence.*;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 
 @Entity
 @Table
@@ -14,6 +18,8 @@ public class User {
 
     @Column
     private String password;
+
+    private static final char[] HEX_ARRAY = "0123456789ABCDEF".toCharArray();
 
     public User() {
     }
@@ -39,6 +45,21 @@ public class User {
         return password;
     }
 
+    public String getHashedPassword(String password) throws NoSuchAlgorithmException {
+        MessageDigest digest = MessageDigest.getInstance("SHA-256");
+        byte[] hash = digest.digest(password.getBytes());
+        return bytesToHex(hash);
+
+    }
+    public static String bytesToHex(byte[] bytes) {
+        char[] hexChars = new char[bytes.length * 2];
+        for (int i = 0; i < bytes.length; i++) {
+            int v = bytes[i] & 0xFF;
+            hexChars[i * 2] = HEX_ARRAY[v >>> 4];
+            hexChars[i * 2 + 1] = HEX_ARRAY[v & 0x0F];
+        }
+        return new String(hexChars);
+    }
     public void setPassword(String password) {
         this.password = password;
     }

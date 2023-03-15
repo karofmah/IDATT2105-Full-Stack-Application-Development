@@ -5,7 +5,11 @@ import com.example.calculatorbackend.service.UsersService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+
+import java.security.NoSuchAlgorithmException;
+
 @EnableAutoConfiguration
 @CrossOrigin(origins="http://localhost:5173/")
 @RestController
@@ -18,8 +22,9 @@ public class UserController {
         this.usersService=usersService;
     }
     @GetMapping("users")
-    public User getUser(@RequestParam String name,@RequestParam String password){
+    public User getUser(@RequestParam String name,@RequestParam String password) throws NoSuchAlgorithmException {
         System.out.println(name+password);
+
         return usersService.getUser(name,password);
     }
 

@@ -26,7 +26,7 @@
 
 import BaseInput from '@/components/BaseInput.vue';
 import router from '@/router';
-import { useTokenStore } from '@/stores/dist/mytoken';
+import { useTokenStore } from '@/stores/mytoken';
 import axios from 'axios';
 import { ref, computed } from 'vue';
 

@@ -12,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.security.NoSuchAlgorithmException;
 import java.time.Duration;
 import java.time.Instant;
 
@@ -35,11 +36,11 @@ public class TokenController {
 
     @PostMapping(value = "")
     @ResponseStatus(value = HttpStatus.CREATED)
-    public String generateToken(final @RequestBody LoginRequest loginRequest) {
+    public String generateToken(final @RequestBody LoginRequest loginRequest) throws NoSuchAlgorithmException {
         // if username and password are valid, issue an access token
         // note that subsequent requests need this token
-        System.out.println(loginRequest.getUsername());
-        if (usersService.checkUserCredentials(loginRequest.getUsername(), loginRequest.getPassword())) {
+
+        if (usersService.checkUserCredentials(loginRequest.getUsername(), loginRequest.getHashedPassword(loginRequest.getPassword()))) {
 
             return generateToken(loginRequest.getUsername());
         }
