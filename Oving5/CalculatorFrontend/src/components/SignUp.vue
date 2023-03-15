@@ -7,7 +7,7 @@
           required
           v-model="username" />
           <BaseInput  label="password"
-          type="text"
+          type="password"
           required
           v-model="password" />
     <button type="submit" @click="signUp()" :disabled="isDisabled">

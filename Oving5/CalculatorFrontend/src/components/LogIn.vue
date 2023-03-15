@@ -7,7 +7,7 @@
           required
           v-model="username" />
           <BaseInput  label="password"
-          type="text"
+          type="password"
           required
           v-model="password" />
     <button type="submit" @click="logIn()" :disabled="isDisabled">
@@ -25,7 +25,7 @@
 import BaseInput from '@/components/BaseInput.vue';
 import router from '@/router';
 import { ref,computed } from 'vue';
-import { useTokenStore } from "../stores/dist/mytoken";
+import { useTokenStore } from "../stores/mytoken";
 
 
 
@@ -56,55 +56,7 @@ import { useTokenStore } from "../stores/dist/mytoken";
        }
        
    
-/*
-export default {
-    
-    emits:['isDisabled'],
-    components:{
-        BaseInput
-    },
-    data() {
-        return {
-            username: 'name',
-            password:'pw',
-            validData:false,
-            tokenStore:useTokenStore(),
-           
-        }
-    },
-    /*
-    setup() {
-    const tokenStore = useTokenStore();
-    return { tokenStore };
-  },
 
-    methods: {
-        async logIn() {
-           
-        
-
-        await this.tokenStore.getTokenAndSaveInStore(this.username, this.password);
-        if((this.tokenStore.jwtToken || this.tokenStore.jwtToken !==null) && this.tokenStore.loggedInUser!==null){
-            console.log(this.tokenStore.loggedInUser)
-           
-            router.push("/my-calculator")
-        } else {
-            alert("Invalid username or password")
-        }
-        
-
-    },
-    signUp() {
-        router.push("/sign-up")
-    }
-},
-    computed:{
-        isDisabled(){
-            return this.username.length === 0 || this.password.length === 0
-        }
-    },
-    
-}*/
    
 </script>
 

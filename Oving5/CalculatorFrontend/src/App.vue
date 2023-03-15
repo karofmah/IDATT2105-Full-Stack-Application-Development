@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { RouterLink, RouterView } from "vue-router";
 import router from "./router";
-import { useTokenStore } from "./stores/dist/mytoken";
+import { useTokenStore } from "./stores/mytoken";
 
 const tokenStore=useTokenStore()
 
