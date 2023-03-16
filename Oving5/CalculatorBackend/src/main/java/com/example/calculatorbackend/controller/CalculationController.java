@@ -31,7 +31,6 @@ public class CalculationController {
     }
     @GetMapping("/calculations")
     public ResponseEntity<List<Calculation>> getAllCalculationsByName(@RequestParam("username") String username) {
-        System.out.println(username);
         return calculationsService.getAllCalculationsByName(username);
     }
     @GetMapping("/calculations/{id}")

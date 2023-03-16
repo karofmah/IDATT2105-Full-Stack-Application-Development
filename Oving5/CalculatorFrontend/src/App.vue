@@ -1,10 +1,10 @@
-<script setup lang="ts">
-import { RouterLink, RouterView } from "vue-router";
+<script setup >
+import { onMounted } from "vue";
+import { onBeforeRouteLeave, RouterLink, RouterView } from "vue-router";
 import router from "./router";
 import { useTokenStore } from "./stores/mytoken";
 
 const tokenStore=useTokenStore()
-
 
 
 function logOut(){

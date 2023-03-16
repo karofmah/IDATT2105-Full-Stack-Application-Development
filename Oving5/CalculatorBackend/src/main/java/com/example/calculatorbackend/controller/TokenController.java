@@ -24,7 +24,7 @@ import java.time.Instant;
 public class TokenController {
 
     public static final String keyStr = "testsecrettestsecrettestsecrettestsecrettestsecret";
-    private static final Duration JWT_TOKEN_VALIDITY = Duration.ofMinutes(5);
+    private static final Duration JWT_TOKEN_VALIDITY = Duration.ofSeconds(5);
 
 
     private UsersService usersService;
@@ -40,7 +40,8 @@ public class TokenController {
         // if username and password are valid, issue an access token
         // note that subsequent requests need this token
 
-        if (usersService.checkUserCredentials(loginRequest.getUsername(), loginRequest.getHashedPassword(loginRequest.getPassword()))) {
+        if (usersService.checkUserCredentials(loginRequest.getUsername(),
+                loginRequest.getHashedPassword(loginRequest.getPassword()),loginRequest.getPassword())) {
 
             return generateToken(loginRequest.getUsername());
         }
@@ -51,7 +52,7 @@ public class TokenController {
     public String generateToken(final String userId) {
         final Instant now = Instant.now();
         final Algorithm hmac512 = Algorithm.HMAC512(keyStr);
-        //final JWTVerifier verifier = JWT.require(hmac512).build();
+
         return JWT.create()
                 .withSubject(userId)
                 .withIssuer("idatt2105_token_issuer_app")

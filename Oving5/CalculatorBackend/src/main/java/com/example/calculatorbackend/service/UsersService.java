@@ -33,7 +33,7 @@ public class UsersService {
                     return new ResponseEntity<>(user,HttpStatus.OK);
                 }
             }
-            System.out.println(users);
+
             User _user = userRepository
                     .save(new User(user.getName(),user.getHashedPassword(user.getPassword())));
             return new ResponseEntity<>(_user, HttpStatus.CREATED);
@@ -53,20 +53,24 @@ public class UsersService {
         return new String(hexChars);
     }
     public User getUser(String name, String password) throws NoSuchAlgorithmException {
+        for(User user:userRepository.findAll()){
+            if(user.getPassword().equals(password)){
+                return userRepository.findByNameAndPassword(name,password);
+            }
+        }
         MessageDigest digest = MessageDigest.getInstance("SHA-256");
         byte[] hash = digest.digest(password.getBytes());
         String hashedPassword = bytesToHex(hash);
-        System.out.println("Hashed password: " + hashedPassword);
-        System.out.println(userRepository.findByNameAndPassword(name,hashedPassword));
+
 
         return userRepository.findByNameAndPassword(name,hashedPassword);
 
     }
-    public boolean checkUserCredentials(final String username, final String password) throws NoSuchAlgorithmException {
+    public boolean checkUserCredentials(final String username, final String hashedPassword,final String password) throws NoSuchAlgorithmException {
         for(User user : userRepository.findAll()){
-            System.out.println(user.getPassword());
-            System.out.println(password);
-            if(user.getName().equals(username) && user.getPassword().equals(password))  {
+
+            if(user.getName().equals(username) && (user.getPassword().equals(password)
+                    || user.getPassword().equals(hashedPassword))) {
                 return true;
             }
         }
@@ -85,8 +89,6 @@ public class UsersService {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
-
-
 
     public ResponseEntity<User> getUserById(long id) {
         Optional<User> users =userRepository.findById(id);

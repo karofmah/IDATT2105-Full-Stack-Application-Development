@@ -89,7 +89,7 @@ import axios from 'axios';
           
           setInterval(()=>{
             this.refreshToken();
-          }, 1000*60*5)
+          }, 1000*5)
         
       }
       if(!this.user || this.user===null){
@@ -99,8 +99,8 @@ import axios from 'axios';
     methods:{ 
       async refreshToken(){
         console.log("refreshing token");
-        console.log(this.tokenStore.jwtToken);
-        return await this.tokenStore.getTokenAndSaveInStore(this.user.name, this.user.password)
+       await this.tokenStore.getTokenAndSaveInStore(this.user.name, this.user.password)
+      this.user = this.tokenStore.loggedInUser
         
       },
       saveValue(event){

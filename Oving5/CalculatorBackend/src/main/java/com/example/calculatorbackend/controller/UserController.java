@@ -23,14 +23,11 @@ public class UserController {
     }
     @GetMapping("users")
     public User getUser(@RequestParam String name,@RequestParam String password) throws NoSuchAlgorithmException {
-        System.out.println(name+password);
-
         return usersService.getUser(name,password);
     }
 
     @PostMapping("/signup")
     public ResponseEntity<User> createUser(@RequestBody User user){
-        System.out.println(user);
         return usersService.createUser(user);
     }
     @GetMapping("/users/{id}")
